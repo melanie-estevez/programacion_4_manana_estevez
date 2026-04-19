@@ -40,7 +40,7 @@ fun main(){
     
     println("For con continue")
     for( i in 1..10){
-        if(1==3){
+        if(i==3){
             continue;
         }
         println("item $i")
