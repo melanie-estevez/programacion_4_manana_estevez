@@ -22,11 +22,14 @@ class MainActivity : ComponentActivity() {
                 //S07_StateHoistingScreen()
                 //S08_BienvenidaScreen()
                 // Componentes Material 3:
-                Paso01_TextFieldScreen()
-                // Paso02_CardScreen()
-                // Paso03_LazyColumnScreen()
-                // Paso04_ScaffoldScreen()
-                // Paso05_NavBarScreen()
+                //Paso01_TextFieldScreen()
+                //Paso01SumaScreen()
+                //CompraTiendaScreen()
+                //Paso02_CardScreen()
+                //Paso03LazyColumnScreen()
+                //Paso04_ScaffoldScreen()
+                //Paso05_NavBarScreen()
+                Paso06_DialogosScreen()
             }
         }
     }

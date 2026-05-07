@@ -10,14 +10,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
+
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Paso01SumaScreen() {
+fun CompraTiendaScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -25,63 +23,99 @@ fun Paso01SumaScreen() {
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        Text("Paso 1 · TextField y OutlinedTextField",
+        Text("Calculo de Subtotal",
             style = MaterialTheme.typography.titleMedium)
         HorizontalDivider()
         SumaNumeros()
     }
 }
 
-
 // ── Demo 2: formulario con validación completa ───────────────────────────────
 @Composable
 private fun SumaNumeros() {
-    var numero1     by remember { mutableStateOf("0") }
-    var numero2      by remember { mutableStateOf("0") }
-    var resultado      by remember { mutableStateOf("0") }
+    var nombre     by remember { mutableStateOf("") }
+    var numero1     by remember { mutableStateOf("") }
+    var numero2      by remember { mutableStateOf("") }
+    var resultadoF      by remember { mutableStateOf("") }
+    var descuentoF      by remember { mutableStateOf("") }
+    var totalAPagarF      by remember { mutableStateOf("") }
+
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Text("Suma de Dos Números",
+        Text("Compra de productos",
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.primary)
+        OutlinedTextField(
+            value           = nombre,
+            onValueChange   = { nombre = it },
+            label           = { Text("Nombre del Producto") },
+            leadingIcon     = { Icon(Icons.Default.Person, contentDescription = null) },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+            singleLine      = true,
+            modifier        = Modifier.fillMaxWidth()
+        )
 
-
-
-        // Numero1
+        // numero1 — validación básica de longitud
         OutlinedTextField(
             value           = numero1,
             onValueChange   = { numero1 = it },
-            label           = { Text("Número 1") },
-            leadingIcon     = { Icon(Icons.Default.Person, contentDescription = null) },
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-            singleLine      = true,
-            modifier        = Modifier.fillMaxWidth()
-        )
-        // Numero2
-        OutlinedTextField(
-            value           = numero2,
-            onValueChange   = { numero2 = it },
-            label           = { Text("Número 1") },
+            label           = { Text("Cantidad") },
             leadingIcon     = { Icon(Icons.Default.Person, contentDescription = null) },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             singleLine      = true,
             modifier        = Modifier.fillMaxWidth()
         )
 
+        // numero1 — validación básica de longitud
+        OutlinedTextField(
+            value           = numero2,
+            onValueChange   = { numero2 = it },
+            label           = { Text("Precio ") },
+            leadingIcon     = { Icon(Icons.Default.Person, contentDescription = null) },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+            singleLine      = true,
+            modifier        = Modifier.fillMaxWidth()
+        )
+
+
         Button(
-            onClick  = {
-                val numero1Int=numero1.toIntOrNull()?:0
-                val numero2Int=numero2.toIntOrNull()?:0
-                resultado=(numero1Int+numero2Int).toString() },
+            onClick = {
+
+                val numero1Int = numero1.toIntOrNull() ?: 0
+                val numero2Int = numero2.toDoubleOrNull() ?: 0.0
+
+                val resultado = numero1Int * numero2Int
+
+                var porcentaje = 0.0
+
+                if (resultado > 50) {
+                    porcentaje = 0.10
+                } else if (resultado > 20) {
+                    porcentaje = 0.05
+                }
+
+                val descuento = resultado * porcentaje
+                val totalAPagar = resultado - descuento
+
+                resultadoF = resultado.toString()
+                descuentoF = descuento.toString()
+                totalAPagarF = totalAPagar.toString()
+            },
+
             modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Sumar")
+        )
+        {
+            Text(text="Calcular")
         }
-        Text(text=resultado)
+        Text(text="Nombre del Producto : $nombre")
+        Text(text="Subtotal a Pagar : $resultadoF")
+        Text(text="Descuento : $descuentoF")
+        Text(text="Total a Pagar : $totalAPagarF")
+
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun Paso01SumaPreview() {
-    MaterialTheme { Paso01SumaScreen() }
+fun CompraTiendaPreview() {
+    MaterialTheme { CompraTiendaScreen() }
 }
