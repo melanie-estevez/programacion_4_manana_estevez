@@ -24,5 +24,4 @@ fun main(){
     println("Tipo inferido nombre: ${nombre::class.simpleName}")
     println("Edad: $edad")
     println("Tipo inferido edad: ${edad::class.simpleName}")
-
 }
