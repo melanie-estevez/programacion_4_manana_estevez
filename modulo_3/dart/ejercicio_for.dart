@@ -1,11 +1,12 @@
 import 'dart:io';
-void main() {
-    print("Ingrese un numero entero: ");
-    int i = int.parse(stdin.readLineSync()!);
 
-    for ( i = 0; i< 10; i*5) {
-    print('Multiplicacion : $i');
-    }
-    
-    
+void main() {
+
+  print("Ingresa un número:");
+  int numero = int.parse(stdin.readLineSync()!);
+
+  for (int i = 1; i <= 5; i++) {
+    print("$numero x $i = ${numero * i}");
+  }
+
 }
