@@ -5,6 +5,7 @@ import com.shopapp.data.remote.dto.toDomain
 import com.shopapp.data.remote.dto.toRequest
 import com.shopapp.domain.model.Category
 import com.shopapp.domain.model.CategoryPayload
+import com.shopapp.domain.repository.CategoryRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
