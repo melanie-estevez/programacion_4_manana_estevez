@@ -1,5 +1,4 @@
-// domain/repository/CategoryRepository.kt
-package com.shopapp.data.repository
+package com.shopapp.domain.repository
 
 import com.shopapp.domain.model.Category
 import com.shopapp.domain.model.CategoryPayload
