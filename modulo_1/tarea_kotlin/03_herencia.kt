@@ -7,7 +7,7 @@ open class Vehiculo(
     open fun mostrarDatos() {
         println("Marca: $marca")
         println("Modelo: $modelo")
-        println("Año: $anio")
+        println("Anio: $anio")
     }
 }
 
@@ -19,11 +19,11 @@ class Auto(
 ) : Vehiculo(marca, modelo, anio) {
 
     override fun mostrarDatos() {
-        println("\n=== Datos del Auto ===")
+        println("  ------------- Datos del Auto  -------------")
         println("Marca: $marca")
         println("Modelo: $modelo")
-        println("Año: $anio")
-        println("Número de puertas: $numeroPuertas")
+        println("Anio: $anio")
+        println("Numero de puertas: $numeroPuertas")
     }
 }
 
@@ -35,10 +35,10 @@ class Motocicleta(
 ) : Vehiculo(marca, modelo, anio) {
 
     override fun mostrarDatos() {
-        println("\n=== Datos de la Motocicleta ===")
+        println("  ------------- Datos de la Motocicleta  -------------")
         println("Marca: $marca")
         println("Modelo: $modelo")
-        println("Año: $anio")
+        println("Anio: $anio")
         println("Cilindrada: $cilindrada cc")
     }
 }
@@ -51,21 +51,21 @@ fun main() {
     print("Ingrese el modelo del auto: ")
     val modeloAuto = readLine()!!
 
-    print("Ingrese el año del auto: ")
+    print("Ingrese el anio del auto: ")
     val anioAuto = readLine()!!.toInt()
 
-    print("Ingrese el número de puertas: ")
+    print("Ingrese el numero de puertas: ")
     val puertas = readLine()!!.toInt()
 
     val auto = Auto(marcaAuto, modeloAuto, anioAuto, puertas)
 
-    print("\nIngrese la marca de la motocicleta: ")
+    print(" Ingrese la marca de la motocicleta: ")
     val marcaMoto = readLine()!!
 
     print("Ingrese el modelo de la motocicleta: ")
     val modeloMoto = readLine()!!
 
-    print("Ingrese el año de la motocicleta: ")
+    print("Ingrese el anio de la motocicleta: ")
     val anioMoto = readLine()!!.toInt()
 
     print("Ingrese la cilindrada: ")

@@ -41,7 +41,7 @@ class ProductoInventario(
 
 fun main() {
 
-    print("Ingrese el código del producto: ")
+    print("Ingrese el c odigo del producto: ")
     val codigo = readLine()!!
 
     print("Ingrese el nombre del producto: ")
@@ -55,13 +55,13 @@ fun main() {
 
     val producto = ProductoInventario(codigo, nombre, precio, stock)
 
-    println("\n=== Información del Producto ===")
-    println("Código: ${producto.codigo}")
+    println("  ------------- Informaci on del Producto  -------------")
+    println("C odigo: ${producto.codigo}")
     println("Nombre: ${producto.nombre}")
     println("Precio: $${producto.consultarPrecio()}")
     println("Stock: ${producto.consultarStock()}")
 
-    print("\nCantidad para aumentar stock: ")
+    print(" Cantidad para aumentar stock: ")
     val aumentar = readLine()!!.toInt()
     producto.aumentarStock(aumentar)
 

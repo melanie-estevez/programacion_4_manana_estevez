@@ -8,7 +8,7 @@ class Libro(
         println("Informacion del Libro")
         println("Titulo: $titulo")
         println("Autos: $autor")
-        println("Año de publicacion: $anio")
+        println("Anio de publicacion: $anio")
         println("Numero de paginas: $numeroPaginas ")
     }
     
@@ -27,7 +27,7 @@ fun main(){
     val titulo = readLine()!!
     println("Ingrese el nombre del autor: ")
     val autor = readLine()!!
-    println("Ingrese el año de publicacion: ")
+    println("Ingrese el anio de publicacion: ")
     val anio = readLine()?.toIntOrNull()?: 0
     println("Ingrese el numero de paginas")
     val numeroPaginas = readLine()?.toIntOrNull()?: 0
