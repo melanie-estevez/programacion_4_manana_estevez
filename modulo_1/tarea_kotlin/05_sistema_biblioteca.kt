@@ -6,28 +6,27 @@ class Libro(
 ) {
 
     fun mostrarInformacion() {
-        println("ID: $id")
-        println("Título: $titulo")
+        println("id: $id")
+        println("Titulo: $titulo")
         println("Autor: $autor")
         println("Estado: ${if (disponible) "Disponible" else "Prestado"}")
-        println("---------------------------")
     }
 
     fun prestarLibro() {
         if (disponible) {
             disponible = false
-            println("El libro '$titulo' fue prestado.")
+            println("Libro '$titulo' prestado correctamente.")
         } else {
-            println("Error: el libro ya está prestado.")
+            println("Error: el libro ya esta prestado.")
         }
     }
 
     fun devolverLibro() {
         if (!disponible) {
             disponible = true
-            println("El libro '$titulo' fue devuelto.")
+            println("Libro '$titulo' devuelto correctamente")
         } else {
-            println("Error: el libro ya está disponible.")
+            println("Error: el libro ya esta disponible.")
         }
     }
 
@@ -43,31 +42,29 @@ class Libro(
 fun main() {
 
     val biblioteca = mutableListOf(
-        Libro(1, "Cien Años de Soledad", "Gabriel García Márquez"),
+        Libro(1, "Cien Años de Soledad", "Gabriel Garcia Marquez"),
         Libro(2, "Don Quijote de la Mancha", "Miguel de Cervantes"),
-        Libro(3, "El Principito", "Antoine de Saint-Exupéry")
+        Libro(3, "El Principito", "Antoine de Saint-Exupery")
     )
 
     while (true) {
-
-        println("\n=== SISTEMA DE BIBLIOTECA ===")
+        println("-------SISTEMA DE BIBLIOTECA-------")
         println("1. Registrar libro")
         println("2. Listar libros disponibles")
         println("3. Prestar libro")
         println("4. Devolver libro")
-        println("5. Buscar libro por título")
+        println("5. Buscar libro por titulo")
         println("6. Salir")
 
-        print("Seleccione una opción: ")
+        print("Seleccione una opcion: ")
         val opcion = readLine()!!.toInt()
 
         when (opcion) {
-
             1 -> {
-                print("Ingrese ID: ")
+                print("Ingrese el id: ")
                 val id = readLine()!!.toInt()
 
-                print("Ingrese título: ")
+                print("Ingrese titulo: ")
                 val titulo = readLine()!!
 
                 print("Ingrese autor: ")
@@ -77,9 +74,8 @@ fun main() {
 
                 println("Libro registrado correctamente.")
             }
-
             2 -> {
-                println("\n=== LIBROS DISPONIBLES ===")
+                println("-------LIBROS DISPONIBLES-------")
 
                 for (libro in biblioteca) {
                     if (libro.estaDisponible()) {
@@ -87,9 +83,8 @@ fun main() {
                     }
                 }
             }
-
             3 -> {
-                print("Ingrese el título del libro a prestar: ")
+                print("Ingrese el titulo del libro a prestar: ")
                 val titulo = readLine()!!
 
                 var encontrado = false
@@ -105,9 +100,8 @@ fun main() {
                     println("Libro no encontrado.")
                 }
             }
-
             4 -> {
-                print("Ingrese el título del libro a devolver: ")
+                print("Ingrese el titulo del libro a devolver: ")
                 val titulo = readLine()!!
 
                 var encontrado = false
@@ -123,9 +117,8 @@ fun main() {
                     println("Libro no encontrado.")
                 }
             }
-
             5 -> {
-                print("Ingrese el título a buscar: ")
+                print("Ingrese el titulo a buscar: ")
                 val titulo = readLine()!!
 
                 var encontrado = false
@@ -141,14 +134,13 @@ fun main() {
                     println("Libro no encontrado.")
                 }
             }
-
             6 -> {
-                println("Saliendo del sistema...")
+                println("Sesion Cerrada")
                 break
             }
 
             else -> {
-                println("Opción inválida.")
+                println("Opcion invalida.")
             }
         }
     }

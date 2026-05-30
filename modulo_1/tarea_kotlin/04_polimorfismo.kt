@@ -34,7 +34,7 @@ fun main() {
         PagoTransferencia()
     )
 
-    println("\n=== Procesando Pagos ===")
+    println("  ------------- Procesando Pagos  -------------")
 
     for (metodo in metodosPago) {
         metodo.procesarPago(monto)
