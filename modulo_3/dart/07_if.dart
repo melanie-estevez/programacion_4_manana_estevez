@@ -1,4 +1,4 @@
-void main() {
+void main(dynamic nombre) {
   // Forma básica
   int temperatura = 38;
 

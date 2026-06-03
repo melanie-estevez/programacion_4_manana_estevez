@@ -9,8 +9,8 @@ fun main(){
 
     println("$precio1 != $precio2 : ${precio1 != precio2}")
 
-    println("$precio1 > $precio2 : ${precio1 > precio2} (más caro)")
-    println("$precio1 < $precio2 : ${precio1 < precio2} (más barato)")
+    println("$precio1 > $precio2 : ${precio1 > precio2} (mas caro)")
+    println("$precio1 < $precio2 : ${precio1 < precio2} (mas barato)")
 
     println("$precio1 >= $precio2 : ${precio1 >= precio2}")
     println("$precio1 <= $precio2 : ${precio1 <= precio2}")

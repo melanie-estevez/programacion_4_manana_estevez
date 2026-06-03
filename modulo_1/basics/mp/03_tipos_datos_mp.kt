@@ -1,5 +1,4 @@
 fun main(){
-    //Numeros Enteros
 
     val numero_pedido: Byte=127  // Entero pequeño (-128 a 127)
     println ("Pedido numero: $numero_pedido")
@@ -13,16 +12,12 @@ fun main(){
     val numero_factura: Long=21_345_654_789_345L
     println("Numero de factura: $numero_factura")
 
-    //Numeros Decimales
 
     val pago: Float=2.50f
     println("El pago es de $pago")
 
     val pago_factura: Double:5.152535
     println("El pago total es $pago_factura")
-
-
-   //Inferido
 
     val plato = "Hamburguesa"
     val precio = 8.50

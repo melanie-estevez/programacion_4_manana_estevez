@@ -10,16 +10,16 @@ fun main(){
     println("Resta (descuento)")
     println("$precio1 - $precio2 : ${precio1 - precio2}")
 
-    println("Multiplicación (varias unidades)")
+    println("Multiplicacion (varias unidades)")
     println("$precio1 * $precio2 : ${precio1 * precio2}")
 
-    println("División (precio por persona)")
+    println("Division (precio por persona)")
     println("$precio1 / $precio2 : ${precio1 / precio2}")
 
-    println("Módulo (residuo)")
+    println("Modulo (residuo)")
     println("$precio1 % $precio2 : ${precio1 % precio2}")
 
-    println("Operadores de Asignación Compuesta")
+    println("Operadores de Asignacion Compuesta")
 
     var total = 10
     total += 5

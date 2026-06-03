@@ -11,16 +11,16 @@ fun main() {
     if (cliente_vip) {
         println("Cliente VIP")
         if (precio_plato < 10) {
-            println("Plato económico con beneficio VIP")
+            println("Plato economico con beneficio VIP")
         } else if (precio_plato > 25) {
-            println("Plato premium con atención especial")
+            println("Plato premium con atencion especial")
         } else {
             println("Plato normal con descuento VIP")
         }
     } else {
         println("Cliente regular")
         if (precio_plato < 10 || precio_plato > 25) {
-            println("Plato fuera del rango estándar")
+            println("Plato fuera del rango estandar")
         } else {
             println("Plato dentro del rango normal")
         }

@@ -1,6 +1,6 @@
 fun main() {
     println("Controles de Flujo When")
-    println("Ingrese código del plato:")
+    println("Ingrese codigo del plato:")
 
     val codigo_plato = readLine()?.toIntOrNull() ?: 0
 
