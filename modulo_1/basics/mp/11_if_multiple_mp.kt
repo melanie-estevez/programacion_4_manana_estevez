@@ -1,12 +1,12 @@
 fun main() {
     println("Controles de flujo")
-    println("Condicional If - Múltiples condiciones")
+    println("Condicional If - Multiples condiciones")
 
     println("Ingrese el precio del plato:")
     val precio_plato = readLine()?.toIntOrNull() ?: 0
 
     val clasificacion = if (precio_plato <= 5) {
-        "Económico"
+        "Economico"
     } else if (precio_plato <= 10) {
         "Normal"
     } else if (precio_plato <= 15) {
@@ -19,5 +19,5 @@ fun main() {
         "Lujo"
     }
 
-    println("Clasificación: $clasificacion")
+    println("Clasificacion: $clasificacion")
 }
