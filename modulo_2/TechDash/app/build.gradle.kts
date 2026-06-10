@@ -70,6 +70,7 @@ dependencies {
 
     // Coil para mostrar imágenes
     implementation("io.coil-kt:coil-compose:2.7.0")
+
 }
 // build.gradle.kts
 dependencies {
@@ -84,4 +85,6 @@ dependencies {
 
     // Google Maps Compose (para visualizar la ubicación)
     implementation("com.google.maps.android:maps-compose:6.2.0")
+
+    implementation("androidx.navigation:navigation-compose:2.7.7")
 }
