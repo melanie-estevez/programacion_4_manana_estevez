@@ -3,6 +3,9 @@ import com.shopapp.data.remote.dto.*
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
+import com.shopapp.data.remote.dto.MessageDto
+import com.shopapp.data.remote.dto.PasswordResetConfirmDto
+import com.shopapp.data.remote.dto.PasswordResetRequestDto
 
 interface AuthApi {
     @POST("auth/login/")
@@ -16,4 +19,15 @@ interface AuthApi {
 
     @POST("auth/logout/")
     suspend fun logout(@Body body: LogoutRequest): Response<Unit>
+
+    @POST("auth/password-reset/")
+    suspend fun requestPasswordReset(
+        @Body body: PasswordResetRequestDto,
+    ): Response<MessageDto>
+
+    @POST("auth/password-reset/confirm/")
+    suspend fun confirmPasswordReset(
+        @Body body: PasswordResetConfirmDto,
+    ): Response<MessageDto>
+
 }
