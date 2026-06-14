@@ -1,12 +1,14 @@
-// presentation/ui/client/profile/ProfileScreen.kt
 package com.shopapp.presentation.ui.client.profile
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,9 +21,10 @@ import com.shopapp.presentation.viewmodel.ProfileViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
-    onEditProfile: () -> Unit       = {},
-    onLogout:      () -> Unit       = {},
-    viewModel:     ProfileViewModel = hiltViewModel(),
+    onEditProfile: () -> Unit = {},
+    onLogout: () -> Unit = {},
+    onSendNotification: () -> Unit = {},
+    viewModel: ProfileViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -33,60 +36,90 @@ fun ProfileScreen(
     }
 
     Scaffold(
-        topBar        = { TopAppBar(title = { Text("Mi perfil") }) },
-        snackbarHost  = { SnackbarHost(snackbarHostState) },
+        topBar = {
+            TopAppBar(
+                title = { Text("Mi perfil") }
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(snackbarHostState)
+        },
     ) { padding ->
+
         when {
+
             state.isLoading -> {
                 Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding),
                     contentAlignment = Alignment.Center,
-                    modifier         = Modifier.fillMaxSize().padding(padding),
-                ) { CircularProgressIndicator() }
+                ) {
+                    CircularProgressIndicator()
+                }
             }
 
             state.error != null -> {
                 Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding),
                     contentAlignment = Alignment.Center,
-                    modifier         = Modifier.fillMaxSize().padding(padding),
                 ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(state.error ?: "Error", color = MaterialTheme.colorScheme.error)
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text(
+                            text = state.error ?: "Error",
+                            color = MaterialTheme.colorScheme.error,
+                        )
+
                         Spacer(Modifier.height(8.dp))
-                        Button(onClick = { viewModel.loadProfile() }) { Text("Reintentar") }
+
+                        Button(
+                            onClick = { viewModel.loadProfile() }
+                        ) {
+                            Text("Reintentar")
+                        }
                     }
                 }
             }
 
             else -> {
+
                 val profile = state.profile
 
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier            = Modifier
+                    modifier = Modifier
                         .fillMaxSize()
                         .padding(padding)
                         .verticalScroll(rememberScrollState())
                         .padding(horizontal = 16.dp),
                 ) {
+
                     Spacer(Modifier.height(24.dp))
 
-                    // ── Avatar ───────────────────────────────────────────────
+                    // Avatar
                     AvatarSection(
-                        avatarUrl       = state.avatarUrl,
-                        username        = profile?.username ?: "",
-                        isUploading     = state.isUploading,
-                        onImageSelected = { uri -> viewModel.uploadAvatar(uri) },
+                        avatarUrl = state.avatarUrl,
+                        username = profile?.username ?: "",
+                        isUploading = state.isUploading,
+                        onImageSelected = {
+                            viewModel.uploadAvatar(it)
+                        },
                     )
 
                     Spacer(Modifier.height(12.dp))
 
                     Text(
-                        text       = profile?.username ?: "—",
-                        style      = MaterialTheme.typography.titleLarge,
+                        text = profile?.username ?: "—",
+                        style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                     )
+
                     Text(
-                        text  = profile?.email ?: "—",
+                        text = profile?.email ?: "—",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -94,37 +127,93 @@ fun ProfileScreen(
                     Spacer(Modifier.height(4.dp))
 
                     if (profile?.isStaff == true) {
-                        SuggestionChip(onClick = {}, label = { Text("Staff") })
+                        SuggestionChip(
+                            onClick = {},
+                            label = {
+                                Text("Staff")
+                            }
+                        )
                     }
 
                     Spacer(Modifier.height(24.dp))
                     HorizontalDivider()
                     Spacer(Modifier.height(16.dp))
 
+                    // Editar perfil
                     OutlinedButton(
-                        onClick  = onEditProfile,
+                        onClick = onEditProfile,
                         modifier = Modifier.fillMaxWidth(),
                     ) {
-                        Icon(Icons.Default.Edit, null, modifier = Modifier.size(18.dp))
+                        Icon(
+                            Icons.Default.Edit,
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp),
+                        )
+
                         Spacer(Modifier.width(8.dp))
+
                         Text("Editar perfil")
                     }
 
-                    Spacer(Modifier.height(8.dp))
+                    Spacer(Modifier.height(12.dp))
 
+                    // SOLO STAFF
+                    if (profile?.isStaff == true) {
+
+                        HorizontalDivider()
+
+                        ListItem(
+                            headlineContent = {
+                                Text(
+                                    text = "Enviar notificación",
+                                    fontWeight = FontWeight.Medium,
+                                )
+                            },
+                            supportingContent = {
+                                Text(
+                                    "Envía un correo a uno o todos los usuarios"
+                                )
+                            },
+                            leadingContent = {
+                                Icon(
+                                    imageVector = Icons.Default.Send,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                )
+                            },
+                            trailingContent = {
+                                Icon(
+                                    imageVector =
+                                        Icons.AutoMirrored.Filled.ArrowForward,
+                                    contentDescription = null,
+                                )
+                            },
+                            modifier = Modifier.clickable(
+                                onClick = onSendNotification
+                            ),
+                        )
+
+                        HorizontalDivider()
+
+                        Spacer(Modifier.height(12.dp))
+                    }
+
+                    // Logout
                     OutlinedButton(
-                        onClick  = onLogout,
+                        onClick = onLogout,
                         modifier = Modifier.fillMaxWidth(),
-                        colors   = ButtonDefaults.outlinedButtonColors(
+                        colors = ButtonDefaults.outlinedButtonColors(
                             contentColor = MaterialTheme.colorScheme.error,
                         ),
                     ) {
                         Icon(
                             Icons.AutoMirrored.Filled.Logout,
-                            null,
+                            contentDescription = null,
                             modifier = Modifier.size(18.dp),
                         )
+
                         Spacer(Modifier.width(8.dp))
+
                         Text("Cerrar sesión")
                     }
 

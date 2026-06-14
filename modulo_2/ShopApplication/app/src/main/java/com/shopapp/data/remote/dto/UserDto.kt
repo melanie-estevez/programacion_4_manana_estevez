@@ -38,6 +38,16 @@ data class UserStatsDto(
     val staff:    Int,
 )
 
+data class SendNotificationDto(
+    @SerializedName("subject") val subject: String,
+    @SerializedName("message") val message: String,
+    @SerializedName("user_id") val userId:  Int? = null,  // null → envío masivo
+)
+data class NotificationResultDto(
+    @SerializedName("detail") val detail: String,
+    @SerializedName("sent")   val sent:   Int,
+    @SerializedName("failed") val failed: Int,
+)
 // ── Mappers ───────────────────────────────────────────────────
 
 fun UserDto.toDomain() = User(
