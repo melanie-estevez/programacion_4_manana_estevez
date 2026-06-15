@@ -121,6 +121,26 @@ fun NavGraph(
                 )
             }
 
+            // ── FORGOT PASSWORD ─────────────────────
+            composable(Screen.ForgotPassword.route) {
+                ForgotPasswordScreen(
+                    onBack        = { navController.popBackStack() },
+                    onGoToConfirm = { navController.navigate(Screen.ResetPasswordConfirm.route) },
+                )
+            }
+
+            // ── RESET PASSWORD CONFIRM ──────────────
+            composable(Screen.ResetPasswordConfirm.route) {
+                ResetPasswordConfirmScreen(
+                    onBack         = { navController.popBackStack() },
+                    onResetSuccess = {
+                        navController.navigate(Screen.Login.route) {
+                            popUpTo(Screen.Login.route) { inclusive = true }
+                        }
+                    },
+                )
+            }
+
             // ── REGISTER ────────────────────────────
             composable(Screen.Register.route) {
                 RegisterScreen(
@@ -132,23 +152,6 @@ fun NavGraph(
                     },
                     onNavigateToLogin = { navController.popBackStack() },
                     viewModel         = authViewModel,
-                )
-            }
-            composable(Screen.ForgotPassword.route) {
-                ForgotPasswordScreen(
-                    onBack        = { navController.popBackStack() },
-                    onGoToConfirm = { navController.navigate(Screen.ResetPasswordConfirm.route) },
-                )
-            }
-
-            composable(Screen.ResetPasswordConfirm.route) {
-                ResetPasswordConfirmScreen(
-                    onBack         = { navController.popBackStack() },
-                    onResetSuccess = {
-                        navController.navigate(Screen.Login.route) {
-                            popUpTo(Screen.Login.route) { inclusive = true }
-                        }
-                    },
                 )
             }
 
@@ -217,13 +220,13 @@ fun NavGraph(
                     }
                 } else {
                     ProfileScreen(
+                        authViewModel = authViewModel,
                         onLogout = {
                             authViewModel.logout()
                             navController.navigate(Screen.Login.route) {
                                 popUpTo(0) { inclusive = true }
                             }
                         },
-                        onSendNotification = { navController.navigate(Screen.SendNotification.route) },
                     )
                 }
             }
@@ -437,27 +440,9 @@ fun NavGraph(
                 }
             }
 
-            // ── Recuperación de contraseña ───────────────────────────────────────────────
 
-            composable(Screen.ForgotPassword.route) {
-                ForgotPasswordScreen(
-                    onBack        = { navController.popBackStack() },
-                    onGoToConfirm = { navController.navigate(Screen.ResetPasswordConfirm.route) },
-                )
-            }
 
-            composable(Screen.ResetPasswordConfirm.route) {
-                ResetPasswordConfirmScreen(
-                    onBack         = { navController.popBackStack() },
-                    onResetSuccess = {
-                        navController.navigate(Screen.Login.route) {
-                            popUpTo(Screen.Login.route) { inclusive = true }
-                        }
-                    },
-                )
-            }
-
-// ── ADMIN NOTIFICATIONS ───────────────────────────────────────────────────
+            // ── ADMIN NOTIFICATIONS ───────────────────────────────────────────────────
             composable(Screen.SendNotification.route) {
                 if (!isStaff) {
                     LaunchedEffect(Unit) {

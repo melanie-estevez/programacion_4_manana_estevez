@@ -40,6 +40,7 @@ data class PasswordResetRequestDto(
     @SerializedName("email") val email: String,
 )
 
+/** Cuerpo del POST /api/auth/password-reset/confirm/ */
 data class PasswordResetConfirmDto(
     @SerializedName("uid")           val uid:          String,
     @SerializedName("token")         val token:        String,
@@ -47,6 +48,10 @@ data class PasswordResetConfirmDto(
     @SerializedName("new_password2") val newPassword2: String,
 )
 
+/**
+ * Respuesta genérica { "detail": "..." }
+ * Usada por ambos endpoints de recuperación de contraseña.
+ */
 data class MessageDto(
     @SerializedName("detail") val detail: String,
 )
