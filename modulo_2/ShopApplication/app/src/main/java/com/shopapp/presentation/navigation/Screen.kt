@@ -28,6 +28,7 @@ sealed class Screen(val route: String) {
     data object AdminUsers      : Screen("admin/users")
 
     data object ForgotPassword       : Screen("forgot-password")
-    data object SendNotification : Screen("send-notification")
     data object ResetPasswordConfirm : Screen("reset-password-confirm")
+
+    data object SendNotification : Screen("admin/notifications")
 }

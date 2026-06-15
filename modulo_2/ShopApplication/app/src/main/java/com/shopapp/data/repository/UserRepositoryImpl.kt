@@ -1,19 +1,21 @@
 package com.shopapp.data.repository
+
+import android.content.Context
+import android.net.Uri
 import com.shopapp.data.remote.api.UserApi
+import com.shopapp.data.remote.dto.SendNotificationDto
 import com.shopapp.data.remote.dto.UserRequestDto
 import com.shopapp.data.remote.dto.toDomain
 import com.shopapp.data.remote.dto.toRequest
+import com.shopapp.domain.model.NotificationResult
 import com.shopapp.domain.model.User
 import com.shopapp.domain.model.UserPayload
 import com.shopapp.domain.repository.UserRepository
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
-import android.content.Context
-import android.net.Uri
-import dagger.hilt.android.qualifiers.ApplicationContext
-import com.shopapp.data.remote.dto.SendNotificationDto
-import com.shopapp.domain.model.NotificationResult
-
+// El error suele ser que falta el import de tu función de extensión personalizada para el Uri, por ejemplo:
+// import com.shopapp.data.util.toMultipart
 
 @Singleton
 class UserRepositoryImpl @Inject constructor(
@@ -75,6 +77,7 @@ class UserRepositoryImpl @Inject constructor(
             )
         } else error("Error ${response.code()}")
     }
+
     override suspend fun getProfile(): Result<User> = runCatching {
         val response = api.getProfile()
         if (response.isSuccessful) response.body()!!.toDomain()
@@ -105,5 +108,4 @@ class UserRepositoryImpl @Inject constructor(
                 error(response.errorBody()?.string() ?: "Error ${response.code()}")
             }
         }
-
 }

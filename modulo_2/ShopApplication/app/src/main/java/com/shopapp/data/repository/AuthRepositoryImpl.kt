@@ -1,5 +1,5 @@
-package com.shopapp.data.repository
 
+package com.shopapp.data.repository
 
 import com.shopapp.data.local.TokenDataStore
 import com.shopapp.data.remote.api.AuthApi
@@ -9,8 +9,6 @@ import com.shopapp.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 import javax.inject.Singleton
-import com.shopapp.data.remote.dto.PasswordResetConfirmDto
-import com.shopapp.data.remote.dto.PasswordResetRequestDto
 
 @Singleton
 class AuthRepositoryImpl @Inject constructor(
@@ -75,6 +73,7 @@ class AuthRepositoryImpl @Inject constructor(
             "Error $code"
         }
     }
+
     override suspend fun requestReset(email: String): Result<String> =
         runCatching {
             val response = api.requestPasswordReset(PasswordResetRequestDto(email))
@@ -106,5 +105,4 @@ class AuthRepositoryImpl @Inject constructor(
                 error(response.errorBody()?.string() ?: "Error ${response.code()}")
             }
         }
-
 }

@@ -4,9 +4,7 @@ package com.shopapp.presentation.navigation
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.*
 import androidx.navigation.compose.*
@@ -33,8 +31,8 @@ import com.shopapp.presentation.ui.uipublic.product.ProductDetailScreen
 import com.shopapp.presentation.viewmodel.AuthViewModel
 import com.shopapp.presentation.viewmodel.CartViewModel
 import com.shopapp.presentation.viewmodel.OrdersAdminViewModel
+
 import com.shopapp.theme.Surface
-import com.shopapp.theme.TextSecondary
 
 @Composable
 fun NavGraph(
@@ -109,7 +107,6 @@ fun NavGraph(
         ) {
 
             // ── LOGIN ───────────────────────────────
-
             composable(Screen.Login.route) {
                 LoginScreen(
                     onLoginSuccess       = { staff ->
@@ -119,7 +116,7 @@ fun NavGraph(
                         }
                     },
                     onNavigateToRegister = { navController.navigate(Screen.Register.route) },
-                    onForgotPassword     = { navController.navigate(Screen.ForgotPassword.route) },  // ← nuevo
+                    onForgotPassword     = { navController.navigate(Screen.ForgotPassword.route) },
                     viewModel            = authViewModel,
                 )
             }
@@ -135,6 +132,23 @@ fun NavGraph(
                     },
                     onNavigateToLogin = { navController.popBackStack() },
                     viewModel         = authViewModel,
+                )
+            }
+            composable(Screen.ForgotPassword.route) {
+                ForgotPasswordScreen(
+                    onBack        = { navController.popBackStack() },
+                    onGoToConfirm = { navController.navigate(Screen.ResetPasswordConfirm.route) },
+                )
+            }
+
+            composable(Screen.ResetPasswordConfirm.route) {
+                ResetPasswordConfirmScreen(
+                    onBack         = { navController.popBackStack() },
+                    onResetSuccess = {
+                        navController.navigate(Screen.Login.route) {
+                            popUpTo(Screen.Login.route) { inclusive = true }
+                        }
+                    },
                 )
             }
 
@@ -197,7 +211,9 @@ fun NavGraph(
             composable(Screen.Profile.route) {
                 if (!isAuthenticated) {
                     LaunchedEffect(Unit) {
-                        navController.navigate(Screen.Login.route) { popUpTo(Screen.Home.route) }
+                        navController.navigate(Screen.Login.route) {
+                            popUpTo(Screen.Home.route)
+                        }
                     }
                 } else {
                     ProfileScreen(
@@ -207,7 +223,7 @@ fun NavGraph(
                                 popUpTo(0) { inclusive = true }
                             }
                         },
-                        onSendNotification = { navController.navigate(Screen.SendNotification.route) },  // ← nuevo
+                        onSendNotification = { navController.navigate(Screen.SendNotification.route) },
                     )
                 }
             }
@@ -390,34 +406,6 @@ fun NavGraph(
                     }
                 }
             }
-            composable(Screen.ForgotPassword.route) {
-                ForgotPasswordScreen(
-                    onBack        = { navController.popBackStack() },
-                    onGoToConfirm = { navController.navigate(Screen.ResetPasswordConfirm.route) },
-                )
-            }
-
-            composable(Screen.ResetPasswordConfirm.route) {
-                ResetPasswordConfirmScreen(
-                    onBack         = { navController.popBackStack() },
-                    onResetSuccess = {
-                        navController.navigate(Screen.Login.route) {
-                            popUpTo(Screen.Login.route) { inclusive = true }
-                        }
-                    },
-                )
-            }
-            composable(Screen.SendNotification.route) {
-                if (!isStaff) {
-                    LaunchedEffect(Unit) {
-                        navController.popBackStack()
-                    }
-                    return@composable
-                }
-                SendNotificationScreen(
-                    onBack = { navController.popBackStack() },
-                )
-            }
 
             // ── ADMIN USERS (CORREGIDO) ────────────
             composable("admin/users") {
@@ -448,7 +436,58 @@ fun NavGraph(
                     }
                 }
             }
+
+            // ── Recuperación de contraseña ───────────────────────────────────────────────
+
+            composable(Screen.ForgotPassword.route) {
+                ForgotPasswordScreen(
+                    onBack        = { navController.popBackStack() },
+                    onGoToConfirm = { navController.navigate(Screen.ResetPasswordConfirm.route) },
+                )
+            }
+
+            composable(Screen.ResetPasswordConfirm.route) {
+                ResetPasswordConfirmScreen(
+                    onBack         = { navController.popBackStack() },
+                    onResetSuccess = {
+                        navController.navigate(Screen.Login.route) {
+                            popUpTo(Screen.Login.route) { inclusive = true }
+                        }
+                    },
+                )
+            }
+
+// ── ADMIN NOTIFICATIONS ───────────────────────────────────────────────────
+            composable(Screen.SendNotification.route) {
+                if (!isStaff) {
+                    LaunchedEffect(Unit) {
+                        navController.navigate(Screen.Home.route) { popUpTo(0) }
+                    }
+                    return@composable
+                }
+
+                AdminScaffold(
+                    currentRoute = Screen.SendNotification.route,
+                    user         = currentUser,
+                    title        = "Enviar notificación",
+                    onNavClick   = { route ->
+                        navController.navigate(route) { launchSingleTop = true }
+                    },
+                    onStoreClick = { navController.navigate(Screen.Home.route) },
+                    onLogout     = {
+                        authViewModel.logout()
+                        navController.navigate(Screen.Login.route) {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    },
+                ) { padding ->
+                    Box(modifier = Modifier.padding(padding)) {
+                        SendNotificationScreen(
+                            onBack = { navController.popBackStack() },
+                        )
+                    }
+                }
+            }
         }
     }
 }
-
