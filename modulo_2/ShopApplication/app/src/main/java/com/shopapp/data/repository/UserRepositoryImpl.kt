@@ -62,7 +62,13 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun toggleActive(id: Int): Result<Boolean> = runCatching {
         val response = api.toggleActive(id)
         if (response.isSuccessful) response.body()!!.isActive
-        else error("Error ${response.code()}")
+        else {
+            val body = response.errorBody()?.string()
+
+            error(
+                "HTTP ${response.code()}\n$body"
+            )
+        }
     }
 
     override suspend fun getStats(): Result<Map<String, Int>> = runCatching {
