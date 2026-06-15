@@ -1,177 +1,232 @@
 package com.shopapp.presentation.ui.client.profile
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.Logout
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.shopapp.presentation.viewmodel.AuthViewModel
-import com.shopapp.theme.*
+import com.shopapp.presentation.viewmodel.ProfileViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
+    onEditProfile: () -> Unit = {},
+    onLogout: () -> Unit = {},
+    onSendNotification: () -> Unit = {},
+    viewModel: ProfileViewModel = hiltViewModel(),
     authViewModel: AuthViewModel,
-    onLogout:      () -> Unit,
 ) {
-    val user by authViewModel.currentUser.collectAsState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Background)
-            .verticalScroll(rememberScrollState())
-            .padding(24.dp),
-    ) {
-        // ── Avatar y nombre ───────────────────────────────────
-        Column(
-            modifier            = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Box(
-                modifier         = Modifier
-                    .size(80.dp)
-                    .background(
-                        brush = androidx.compose.ui.graphics.Brush.linearGradient(
-                            listOf(Accent, AccentLight),
-                        ),
-                        shape = CircleShape,
-                    ),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text       = user?.username?.firstOrNull()?.uppercaseChar()?.toString() ?: "?",
-                    fontSize   = 36.sp,
-                    fontWeight = FontWeight.Bold,
-                    color      = AccentOnDark,
-                )
-            }
-            Spacer(Modifier.height(16.dp))
-            Text(
-                text       = user?.username ?: "—",
-                style      = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold,
-                color      = TextPrimary,
+    val state by viewModel.state.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(Unit) {
+        viewModel.snackbar.collect {
+            snackbarHostState.showSnackbar(it)
+        }
+    }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Mi perfil") }
             )
-            Text(
-                text  = user?.email ?: "—",
-                style = MaterialTheme.typography.bodyMedium,
-                color = TextSecondary,
-            )
-            Spacer(Modifier.height(8.dp))
-            if (user?.isStaff == true) {
-                Surface(
-                    color  = Accent.copy(alpha = 0.15f),
-                    shape  = MaterialTheme.shapes.extraSmall,
+        },
+        snackbarHost = {
+            SnackbarHost(snackbarHostState)
+        },
+    ) { padding ->
+
+        when {
+
+            state.isLoading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding),
+                    contentAlignment = Alignment.Center,
                 ) {
-                    Text(
-                        text       = "Staff",
-                        color      = Accent,
-                        fontSize   = 11.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier   = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
-                        letterSpacing = 0.8.sp,
-                    )
+                    CircularProgressIndicator()
                 }
             }
-        }
 
-        // ── Info del usuario ──────────────────────────────────
-        Surface(
-            color    = Surface,
-            shape    = MaterialTheme.shapes.large,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text(
-                    text      = "Información de la cuenta",
-                    style     = MaterialTheme.typography.labelSmall,
-                    color     = TextSecondary,
-                    letterSpacing = 0.8.sp,
-                    modifier  = Modifier.padding(bottom = 12.dp),
-                )
-
-                listOf(
-                    "ID de usuario" to (user?.id?.toString() ?: "—"),
-                    "Usuario"       to (user?.username ?: "—"),
-                    "Email"         to (user?.email ?: "—"),
-                    "Rol"           to (if (user?.isStaff == true) "Administrador" else "Cliente"),
-                ).forEachIndexed { i, (label, value) ->
-                    Row(
-                        modifier              = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 10.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
+            state.error != null -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Text(
-                            text  = label,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = TextSecondary,
+                            state.error ?: "Error",
+                            color = MaterialTheme.colorScheme.error,
                         )
-                        Text(
-                            text       = value,
-                            style      = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.SemiBold,
-                            color      = TextPrimary,
-                        )
+
+                        Spacer(Modifier.height(8.dp))
+
+                        Button(
+                            onClick = {
+                                viewModel.loadProfile()
+                            }
+                        ) {
+                            Text("Reintentar")
+                        }
                     }
-                    if (i < 3) HorizontalDivider(color = BorderLight, thickness = 0.5.dp)
                 }
             }
-        }
 
-        Spacer(Modifier.height(24.dp))
+            else -> {
 
-        // ── Botón cerrar sesión ───────────────────────────────
-        var showConfirm by remember { mutableStateOf(false) }
+                val profile = state.profile
 
-        OutlinedButton(
-            onClick  = { showConfirm = true },
-            modifier = Modifier.fillMaxWidth().height(52.dp),
-            colors   = ButtonDefaults.outlinedButtonColors(contentColor = Error),
-            border   = ButtonDefaults.outlinedButtonBorder.copy(
-                brush = androidx.compose.ui.graphics.SolidColor(Error.copy(alpha = 0.5f)),
-            ),
-            shape    = MaterialTheme.shapes.medium,
-        ) {
-            Icon(Icons.Default.Logout, contentDescription = null, modifier = Modifier.size(18.dp))
-            Spacer(Modifier.width(8.dp))
-            Text("Cerrar sesión", fontWeight = FontWeight.SemiBold)
-        }
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding)
+                        .verticalScroll(rememberScrollState())
+                        .padding(horizontal = 16.dp),
 
-        // Diálogo de confirmación
-        if (showConfirm) {
-            AlertDialog(
-                onDismissRequest = { showConfirm = false },
-                title            = { Text("¿Cerrar sesión?", color = TextPrimary) },
-                text             = { Text("Tu sesión se cerrará en este dispositivo.", color = TextSecondary) },
-                confirmButton    = {
-                    TextButton(onClick = {
-                        showConfirm = false
-                        authViewModel.logout()
-                        onLogout()
-                    }) {
-                        Text("Cerrar sesión", color = Error, fontWeight = FontWeight.Bold)
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+
+                    Spacer(Modifier.height(24.dp))
+
+                    AvatarSection(
+                        avatarUrl = state.avatarUrl,
+                        username = profile?.username ?: "",
+                        isUploading = state.isUploading,
+                        onImageSelected = {
+                            viewModel.uploadAvatar(it)
+                        },
+                    )
+
+                    Spacer(Modifier.height(12.dp))
+
+                    Text(
+                        text = profile?.username ?: "—",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                    )
+
+                    Text(
+                        text = profile?.email ?: "—",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+
+                    Spacer(Modifier.height(4.dp))
+
+                    if (profile?.isStaff == true) {
+                        SuggestionChip(
+                            onClick = {},
+                            label = {
+                                Text("Staff")
+                            },
+                        )
                     }
-                },
-                dismissButton    = {
-                    TextButton(onClick = { showConfirm = false }) {
-                        Text("Cancelar", color = TextSecondary)
+
+                    Spacer(Modifier.height(24.dp))
+
+                    HorizontalDivider()
+
+                    Spacer(Modifier.height(16.dp))
+
+                    OutlinedButton(
+                        onClick = onEditProfile,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Icon(
+                            Icons.Default.Edit,
+                            null,
+                            modifier = Modifier.size(18.dp),
+                        )
+
+                        Spacer(Modifier.width(8.dp))
+
+                        Text("Editar perfil")
                     }
-                },
-                containerColor   = Surface,
-                shape            = MaterialTheme.shapes.large,
-            )
+
+                    if (profile?.isStaff == true) {
+
+                        Spacer(Modifier.height(8.dp))
+
+                        HorizontalDivider()
+
+                        ListItem(
+                            headlineContent = {
+                                Text(
+                                    "Enviar notificación",
+                                    fontWeight = FontWeight.Medium,
+                                )
+                            },
+
+                            supportingContent = {
+                                Text(
+                                    "Envía un correo a uno o todos los usuarios"
+                                )
+                            },
+
+                            leadingContent = {
+                                Icon(
+                                    imageVector = Icons.Default.Send,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                )
+                            },
+
+                            trailingContent = {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                    contentDescription = null,
+                                )
+                            },
+
+                            modifier = Modifier.clickable {
+                                onSendNotification()
+                            }
+                        )
+
+                        HorizontalDivider()
+                    }
+
+                    Spacer(Modifier.height(8.dp))
+
+                    OutlinedButton(
+                        onClick = onLogout,
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = MaterialTheme.colorScheme.error,
+                        ),
+                    ) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.Logout,
+                            null,
+                            modifier = Modifier.size(18.dp),
+                        )
+
+                        Spacer(Modifier.width(8.dp))
+
+                        Text("Cerrar sesión")
+                    }
+
+                    Spacer(Modifier.height(24.dp))
+                }
+            }
         }
     }
 }
