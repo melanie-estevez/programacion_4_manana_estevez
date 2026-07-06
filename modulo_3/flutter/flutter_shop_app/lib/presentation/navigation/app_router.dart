@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_shop_app/presentation/screens/cart/cart_screen.dart';
 import 'package:flutter_shop_app/presentation/screens/catalog/product_detail_screen.dart';
+import 'package:flutter_shop_app/presentation/screens/orders/orderdetailscreen.dart';
 import 'package:go_router/go_router.dart';
 import '../../domain/model/auth_state.dart';
 import '../providers/auth_provider.dart';
@@ -12,6 +13,9 @@ import '../screens/auth/register_screen.dart';
 import '../screens/catalog/catalog_screen.dart';
 import '../screens/catalog/home_screen.dart';
 import 'public_shell.dart';
+import '../screens/orders/orders_screen.dart';
+
+import '../screens/auth/profile_screen.dart';
 
 class _PlaceholderScreen extends ConsumerWidget {
   final String title;
@@ -63,6 +67,23 @@ final routerProvider = Provider<GoRouter>((ref) {
       // ── Auth ──────────────────────────────────────────────
       GoRoute(path: '/login',    builder: (_, __) => const LoginScreen()),
       GoRoute(path: '/register', builder: (_, __) => const RegisterScreen()),
+     
+
+// Dentro del ShellRoute, reemplazar placeholders:
+      GoRoute(
+        path: '/orders',
+        builder: (_, __) => const OrdersScreen(),
+      ),
+      GoRoute(
+        path: '/orders/:id',
+        builder: (_, s) => OrderDetailScreen(
+          orderId: int.parse(s.pathParameters['id']!),
+        ),
+      ),
+      GoRoute(
+        path: '/profile',
+        builder: (_, __) => const ProfileScreen(),
+      ),
 
       // ── Zona pública con BottomNavBar ──────────────────────
       ShellRoute(
