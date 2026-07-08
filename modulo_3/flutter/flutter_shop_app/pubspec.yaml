@@ -36,6 +36,9 @@ dependencies:
 
   # ── Utilidades ────────────────────────────────────────────
   intl: ^0.19.0
+# Caché de imágenes de red con placeholder
+  image_picker: ^1.2.2          # Seleccionar imagen de galería / cámara
+  http: ^1.6.0    
 
 dev_dependencies:
   flutter_test:
@@ -49,6 +52,7 @@ dev_dependencies:
   riverpod_generator: ^2.4.3
   custom_lint: ^0.7.0
   riverpod_lint: ^2.3.13
+
 
 flutter:
   uses-material-design: true
