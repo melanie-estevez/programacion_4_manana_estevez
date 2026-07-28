@@ -8,7 +8,9 @@ data class User(
     val lastName: String,
     val isStaff: Boolean,
     val isActive: Boolean,
+
     val dateJoined: String?=null,
+
     val numOrders: Int,
     val avatarUrl:  String? = null,
 )
