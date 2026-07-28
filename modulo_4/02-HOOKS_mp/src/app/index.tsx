@@ -1,0 +1,27 @@
+// app/index.tsx — navegación entre pasos de hooks (temática restaurante)
+import { View, Text } from 'react-native'
+import Paso1 from '@/components/Paso1'
+
+// ┌──────────────────────────────────────────────────────────────────┐
+// │  Cambia este número y guarda (Ctrl+S) para navegar entre pasos. │
+// │  1  Paso 1  useState — reintentos de envío de pedido            │
+// │  2  Paso 2  useEffect — estado del pedido con setInterval        │
+// │  3  Paso 3  useRef — foco en notas del pedido (TextInput)       │
+// │  4  Paso 4  Hooks nativos de RN — dimensiones, esquema de color  │
+// │  5  Paso 5  Custom hook — usePedidoSimulado                     │
+// │  6  Paso 6  Ejemplo combinado — pantalla de estado del local    │
+// └──────────────────────────────────────────────────────────────────┘
+const PASO = 1
+
+export default function Index() {
+  switch (PASO) {
+    case 1:
+      return <Paso1 />
+    default:
+      return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text>Paso {PASO}: crea la pantalla primero</Text>
+        </View>
+      )
+  }
+}
