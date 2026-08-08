@@ -61,3 +61,4 @@ fun main() {
         .map { it.aplicarDescuento(10.0) }
         .forEach { println("  ${it.nombre}: ${"%.2f".format(it.precio)}") }
 }
+
